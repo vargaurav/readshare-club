@@ -4,6 +4,7 @@ var
     Q = require('q'),
     _ = require('lodash'),
     UTIL = require('util'),
+    mysqlClinet = require('../lib/mysqlConnection'),
     Logger = null;
 
 function controller(opts) {
@@ -21,6 +22,14 @@ controller.prototype.init = function (opts, cb) {
     Logger.info(`Starting the controller object with: ${UTIL.inspect(opts)}`);
 
     new Q(undefined)
+        .then(function(){
+            return mysqlClinet.init();
+        })
+        .then(function(con){
+            Logger.info(`Set mysql in controller object`);
+            self.sqlClient = con;
+            return Q.resolve();
+        })
         .then(function () {
             Logger.info(`Init all dependencies`);
             return cb();
