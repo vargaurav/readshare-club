@@ -5,15 +5,16 @@ var
     _ = require('lodash'),
     UTIL = require('util'),
     mysqlClinet = require('../lib/mysqlConnection'),
+    testController = require('../controller/testController'),
     Logger = null;
 
 function controller(opts) {
-    var self = this;
+    let self = this;
     Logger = opts.LOGGER || require('../lib/logger');
 }
 
 controller.prototype.init = function (opts, cb) {
-    var self = this;
+    let self = this;
 
     if (typeof cb !== 'function') {
         cb = function () { };
@@ -27,8 +28,10 @@ controller.prototype.init = function (opts, cb) {
         })
         .then(function(con){
             Logger.info(`Set mysql in controller object`);
-            self.sqlClient = con;
-            return Q.resolve();
+            self.DB_INSTANCE = con;
+            Logger.info(`Initiating test controller`);
+            self.TEST_CONTROLLER = new testController(opts,self);
+            return self.TEST_CONTROLLER.init(opts);
         })
         .then(function () {
             Logger.info(`Init all dependencies`);
