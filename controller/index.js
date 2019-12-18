@@ -6,6 +6,7 @@ var
     UTIL = require('util'),
     mysqlClinet = require('../lib/mysqlConnection'),
     testController = require('../controller/testController'),
+    USER_CONTROLLER = require('../controller/userController'),
     Logger = null;
 
 function controller(opts) {
@@ -32,6 +33,12 @@ controller.prototype.init = function (opts, cb) {
             Logger.info(`Initiating test controller`);
             self.TEST_CONTROLLER = new testController(opts,self);
             return self.TEST_CONTROLLER.init(opts);
+        })
+        .then(function(con){
+            Logger.info(`Test controller initialised`);
+            Logger.info(`Initiating User Controller`);
+            self.USER_CONTROLLER = new USER_CONTROLLER(opts,self);
+            return self.USER_CONTROLLER.init(opts);
         })
         .then(function () {
             Logger.info(`Init all dependencies`);

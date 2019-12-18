@@ -6,6 +6,7 @@ const boundMethod = require('../lib/util');
 const CommonController = require('../controller/CommonController');
 const ResponseController = require('../controller/ResponseController');
 const ErrorController = require('../controller/ErrorController');
+const apiSchema = require('../api-schema/user');
 
 
 module.exports = function (app, controllerObject) {
@@ -36,5 +37,10 @@ module.exports = function (app, controllerObject) {
     app.get(
         '/v1/gettestdata',
         boundMethod(controllerObject.TEST_CONTROLLER, 'getDataFromTest')
+    );
+    app.post(
+        '/v1/registerUser',
+        CommonController.validateSchema(apiSchema.rules.register_user),
+        boundMethod(controllerObject.USER_CONTROLLER, 'registerUser')
     );
 };
