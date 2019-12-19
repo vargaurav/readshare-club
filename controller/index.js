@@ -4,15 +4,18 @@ var
     Q = require('q'),
     _ = require('lodash'),
     UTIL = require('util'),
+    mysqlClinet = require('../lib/mysqlConnection'),
+    testController = require('../controller/testController'),
+    USER_CONTROLLER = require('../controller/userController'),
     Logger = null;
 
 function controller(opts) {
-    var self = this;
+    let self = this;
     Logger = opts.LOGGER || require('../lib/logger');
 }
 
 controller.prototype.init = function (opts, cb) {
-    var self = this;
+    let self = this;
 
     if (typeof cb !== 'function') {
         cb = function () { };
@@ -21,6 +24,22 @@ controller.prototype.init = function (opts, cb) {
     Logger.info(`Starting the controller object with: ${UTIL.inspect(opts)}`);
 
     new Q(undefined)
+        .then(function(){
+            return mysqlClinet.init();
+        })
+        .then(function(con){
+            Logger.info(`Set mysql in controller object`);
+            self.DB_INSTANCE = con;
+            Logger.info(`Initiating test controller`);
+            self.TEST_CONTROLLER = new testController(opts,self);
+            return self.TEST_CONTROLLER.init(opts);
+        })
+        .then(function(con){
+            Logger.info(`Test controller initialised`);
+            Logger.info(`Initiating User Controller`);
+            self.USER_CONTROLLER = new USER_CONTROLLER(opts,self);
+            return self.USER_CONTROLLER.init(opts);
+        })
         .then(function () {
             Logger.info(`Init all dependencies`);
             return cb();
