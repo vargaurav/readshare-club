@@ -1,5 +1,6 @@
 'use strict';
 const Q = require('q');
+const UTIL = require('util');
 let Logger;
 
 class AUTH_REPO {
@@ -39,6 +40,22 @@ class AUTH_REPO {
         let self = this;
         let deferred = Q.defer();
         let query = 'select * from auth where token = ' + token;
+        self.DB_INSTANCE.query(query, function (error, result) {
+            if(error)
+                return deferred.reject(error);
+            else 
+                return deferred.resolve(result);
+        });
+
+        return deferred.promise;
+    }
+
+    upsertAuthToken(data) {
+        let self = this;
+        let deferred = Q.defer();
+        let query = UTIL.format('INSERT INTO auth(user_id,token) VALUES(%s,"%s") ON DUPLICATE KEY UPDATE token="%s"',
+                                data.user_id, data.token, data.token);
+        Logger.info(`auth_upsertAuthtoken : ${query}`);
         self.DB_INSTANCE.query(query, function (error, result) {
             if(error)
                 return deferred.reject(error);

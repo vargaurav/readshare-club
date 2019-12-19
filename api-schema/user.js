@@ -1,7 +1,7 @@
 module.exports = {
     rules: {
         login: {
-            user_id: {
+            email_id: {
                 required: true,
                 message: 'user_id cannot be empty'
             },

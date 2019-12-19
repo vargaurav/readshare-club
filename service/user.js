@@ -40,6 +40,50 @@ class USER_SERVICE {
 
         return deferred.promise;
     }
+
+    getUserDataByEmail(email_id) {
+        let self = this;
+        let deferred = Q.defer();
+        new Q()
+            .then(function(){
+                return self.USER_REPO.getUserDataByEmail(email_id);
+            })
+            .then(function(result){
+                if(result.length == 1){
+                    return deferred.resolve(result[0]);
+                } else {
+                    return deferred.reject(new Error("User Not found!"));
+                }
+            })
+            .fail(function(err){
+                Logger.info(`Error in getting user details ${err}`);
+                return deferred.reject(err);
+            });
+
+        return deferred.promise;
+    }
+
+    getUserDataById(user_id) {
+        let self = this;
+        let deferred = Q.defer();
+        new Q()
+            .then(function(){
+                return self.USER_REPO.getUserDataByID(user_id);
+            })
+            .then(function(result){
+                if(result.length == 1){
+                    return deferred.resolve(result[0]);
+                } else {
+                    return deferred.reject(new Error("User Not found!"));
+                }
+            })
+            .fail(function(err){
+                Logger.info(`Error in getting user details ${err}`);
+                return deferred.reject(err);
+            });
+
+        return deferred.promise;
+    }
 }
 
 module.exports = USER_SERVICE;

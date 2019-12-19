@@ -43,4 +43,9 @@ module.exports = function (app, controllerObject) {
         CommonController.validateSchema(apiSchema.rules.register_user),
         boundMethod(controllerObject.USER_CONTROLLER, 'registerUser')
     );
+
+    app.post(
+        '/v1/login',
+        boundMethod(controllerObject.USER_CONTROLLER, 'loginUser')
+    );
 };
