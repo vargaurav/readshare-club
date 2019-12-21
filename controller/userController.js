@@ -4,6 +4,7 @@ const USER_SERVICE = require('../service/user');
 const AUTH_SERVICE = require('../service/auth');
 const crypto = require('../auth');
 const _ = require('lodash');
+const CONFIG = require('../configurations');
 let Logger;
 
 
@@ -97,6 +98,65 @@ class USER_CONTROLLER {
                 res.status(500).json({"message": "some error occurred!"});
             });
         
+    }
+
+    getDataCorrespondingToToken(sso_token) {
+        let self = this;
+        let deferred = Q.defer();
+
+        new Q()
+            .then(function(){
+                crypto.decryptToken(sso_token, function(err, data){
+                    if(err){
+                        return deferred.reject(new Error("Invalid token"));
+                    } else {
+                        self.AUTH_SERVICE.getUserDataByUserId(data.user_id).then(function(auth_data){
+                            self.USER_SERVICE.getUserDataById(data.user_id).then(function(user_data){
+                                if(data.password == user_data.password && data.token == auth_data.token){
+                                    data.auth_data = auth_data;
+                                    data.user_data = user_data;
+                                    return deferred.resolve(data);
+                                } else {
+                                    return deferred.reject(new Error("Invalid Token"));
+                                }
+                            }).fail(function(error){
+                                return deferred.reject(new Error("User Not Found"));
+                            });
+                        }).fail(function(error){
+                            return deferred.reject(new Error("User Not Found"));
+                        });
+                    }
+                });
+            })
+            .fail(function(err) {
+                return deferred.reject(new Error("Some error occurred"));
+            });
+
+        return deferred.promise;
+    }
+
+    getUserDetails(req, res, next) {
+        let self = this;
+        if(req.headers.sso_token) {
+            self.getDataCorrespondingToToken(req.headers.sso_token).then(function(result){
+                _.set(req, 'auth_data', result);
+                return next();
+            }).fail(function(err){
+                res.status(400).json({"message": err.message || "Some error occurred"});
+            });
+        } else if(req.headers.is_anonymous) {
+            self.USER_SERVICE.getUserDataById(CONFIG.common.anonymous_user_id).then(function(result){
+                let data = {};
+                data.user_id = 4;
+                data.user_data = result;
+                _.set(req, 'auth_data', data);
+                return next();
+            }).fail(function(err){
+                res.status(400).json({"message": err.message || "Some error occurred"});
+            });
+        } else {
+            res.status(400).json({"message":"Either write anonymously or login"});
+        }
     }
 }
 

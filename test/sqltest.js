@@ -8,8 +8,8 @@ var connection = mysql.createConnection({
  
 connection.connect();
  
-connection.query('SELECT * from test', function (error, results, fields) {
-    //console.log(error);
+connection.query('insert into test(FirstName, LastName) values("G","V")', function (error, results, fields) {
+    console.log(error);
     console.log('The solution is: ', results);
 });
  

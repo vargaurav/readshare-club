@@ -7,6 +7,7 @@ var
     mysqlClinet = require('../lib/mysqlConnection'),
     testController = require('../controller/testController'),
     USER_CONTROLLER = require('../controller/userController'),
+    BOOK_CONTROLLER = require('../controller/bookController'),
     Logger = null;
 
 function controller(opts) {
@@ -38,6 +39,12 @@ controller.prototype.init = function (opts, cb) {
             Logger.info(`Test controller initialised`);
             Logger.info(`Initiating User Controller`);
             self.USER_CONTROLLER = new USER_CONTROLLER(opts,self);
+            return self.USER_CONTROLLER.init(opts);
+        })
+        .then(function(con){
+            Logger.info(`User controller initialised`);
+            Logger.info(`Initiating Book Controller`);
+            self.BOOK_CONTROLLER = new BOOK_CONTROLLER(opts,self);
             return self.USER_CONTROLLER.init(opts);
         })
         .then(function () {

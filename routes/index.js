@@ -7,6 +7,7 @@ const CommonController = require('../controller/CommonController');
 const ResponseController = require('../controller/ResponseController');
 const ErrorController = require('../controller/ErrorController');
 const apiSchema = require('../api-schema/user');
+const bookApiSchema = require('../api-schema/book');
 
 
 module.exports = function (app, controllerObject) {
@@ -47,5 +48,19 @@ module.exports = function (app, controllerObject) {
     app.post(
         '/v1/login',
         boundMethod(controllerObject.USER_CONTROLLER, 'loginUser')
+    );
+
+    app.post(
+        '/v1/book/summary',
+        CommonController.validateSchema(bookApiSchema.rules.post_summary),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
+        boundMethod(controllerObject.BOOK_CONTROLLER, 'getBookDetails'),
+        boundMethod(controllerObject.BOOK_CONTROLLER, 'addOrEditBook'),
+        boundMethod(controllerObject.BOOK_CONTROLLER, 'saveContent')
+    );
+
+    app.get(
+        '/v1/home',
+        boundMethod(controllerObject.BOOK_CONTROLLER, 'getHomePageContent'),
     );
 };

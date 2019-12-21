@@ -1,6 +1,7 @@
 'use strict';
 const Q = require('q');
 const USER_REPO = require('../repositories/user');
+const CONFIG = require('../configurations');
 let Logger;
 
 class USER_SERVICE {
