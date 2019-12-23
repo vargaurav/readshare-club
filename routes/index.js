@@ -8,7 +8,7 @@ const ResponseController = require('../controller/ResponseController');
 const ErrorController = require('../controller/ErrorController');
 const apiSchema = require('../api-schema/user');
 const bookApiSchema = require('../api-schema/book');
-
+const essaySchema = require('../api-schema/essay');
 
 module.exports = function (app, controllerObject) {
 
@@ -64,6 +64,20 @@ module.exports = function (app, controllerObject) {
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getHomePageContent'),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getBooksInfo'),
+        ResponseController.sendResponse
+    );
+
+    app.post(
+        '/v1/essays/summary',
+        CommonController.validateSchema(essaySchema.rules.post_essay),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
+        boundMethod(controllerObject.ESSAY_CONTROLLER, 'saveContent')
+    );
+
+    app.get(
+        '/v1/essays',
+        boundMethod(controllerObject.ESSAY_CONTROLLER, 'getHomePageContent'),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
         ResponseController.sendResponse
     );
 };

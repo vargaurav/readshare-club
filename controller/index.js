@@ -8,6 +8,7 @@ var
     testController = require('../controller/testController'),
     USER_CONTROLLER = require('../controller/userController'),
     BOOK_CONTROLLER = require('../controller/bookController'),
+    ESSAY_CONTROLLER = require('../controller/essayController'),
     Logger = null;
 
 function controller(opts) {
@@ -46,6 +47,12 @@ controller.prototype.init = function (opts, cb) {
             Logger.info(`Initiating Book Controller`);
             self.BOOK_CONTROLLER = new BOOK_CONTROLLER(opts,self);
             return self.USER_CONTROLLER.init(opts);
+        })
+        .then(function(con){
+            Logger.info(`Book controller initialised`);
+            Logger.info(`Initiating essay Controller`);
+            self.ESSAY_CONTROLLER = new ESSAY_CONTROLLER(opts,self);
+            return self.ESSAY_CONTROLLER.init(opts);
         })
         .then(function () {
             Logger.info(`Init all dependencies`);
