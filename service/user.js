@@ -1,7 +1,6 @@
 'use strict';
 const Q = require('q');
 const USER_REPO = require('../repositories/user');
-const CONFIG = require('../configurations');
 let Logger;
 
 class USER_SERVICE {
@@ -77,6 +76,24 @@ class USER_SERVICE {
                 } else {
                     return deferred.reject(new Error("User Not found!"));
                 }
+            })
+            .fail(function(err){
+                Logger.info(`Error in getting user details ${err}`);
+                return deferred.reject(err);
+            });
+
+        return deferred.promise;
+    }
+
+    getUsersInfo(users){
+        let self = this;
+        let deferred = Q.defer();
+        new Q()
+            .then(function(){
+                return self.USER_REPO.getUsersInfo(users);
+            })
+            .then(function(result){
+                return deferred.resolve(result);
             })
             .fail(function(err){
                 Logger.info(`Error in getting user details ${err}`);

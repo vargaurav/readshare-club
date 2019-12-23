@@ -74,6 +74,34 @@ class BOOK_CONTROLLER {
             res.status(400).json({"message":"Something went wrong!"});
         }
     }
+
+    getHomePageContent(req, res, next) {
+        let count = _.get(req.query, 'count', 0);
+        let self = this;
+
+        self.BOOK_SERVICE.getHomePageContent(count).then(function(result){
+            let user_info = result.map(function(row){return row.user_id});
+            let book_info = result.map(function(row){return row.book_id});
+            res.body = {};
+            res.body.content_info = result;
+            res.body.user_info = user_info;
+            res.body.book_info = book_info;
+            return next();
+        }).fail(function(err){
+            res.status(400).json({"message":"Some error occured"});
+        });
+    }
+
+    getBooksInfo(req, res, next) {
+        let self = this;
+        let users = _.get(res.body, 'book_info', []);
+        self.BOOK_SERVICE.getBooksInfo(users).then(function(result){
+            res.body.book_info = result;
+            return next();
+        }).fail(function(err){
+            res.status(400).json({"message":"Something went wrong!"});
+        }); 
+    }
 }
 
 module.exports = BOOK_CONTROLLER;

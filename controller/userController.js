@@ -158,6 +158,18 @@ class USER_CONTROLLER {
             res.status(400).json({"message":"Either write anonymously or login"});
         }
     }
+
+    getUsersInfo(req, res, next) {
+        let self = this;
+        let users = _.get(res.body, 'user_info', []);
+        self.USER_SERVICE.getUsersInfo(users).then(function(result){
+            res.body.user_info = result;
+            return next();
+        }).fail(function(err){
+            console.log(err);
+            res.status(400).json({"message":"Something went wrong!"});
+        }); 
+    }
 }
 
 module.exports = USER_CONTROLLER;

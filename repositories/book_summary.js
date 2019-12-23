@@ -37,6 +37,27 @@ class BOOK_REPO {
 
         return deferred.promise;
     }
+
+    getHomePageContent(count) {
+        let self = this;
+        let deferred = Q.defer();
+        if(!count){
+            count = 0;
+        } else {
+            count = count * 10;
+        }
+
+        let query = UTIL.format('select * from book_summary order by created_at limit %s, 10',count);
+        Logger.info(`book_getHomePageContent : ${query}`);
+        self.DB_INSTANCE.query(query, function (error, result) {
+            if(error)
+                return deferred.reject(error);
+            else 
+                return deferred.resolve(result);
+        });
+
+        return deferred.promise;
+    }
 }
 
 module.exports = BOOK_REPO;

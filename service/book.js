@@ -115,6 +115,42 @@ class BOOK_SERVICE {
 
         return deferred.promise;
     }
+
+    getHomePageContent(count) {
+        let self = this;
+        let deferred = Q.defer();
+
+        new Q()
+            .then(function(){
+                return self.BOOK_SUMMARY_REPO.getHomePageContent(count);
+            })
+            .then(function(result){
+                return deferred.resolve(result);
+            })
+            .fail(function(err){
+                return deferred.reject(err);
+            });
+
+        return deferred.promise;
+    }
+
+    getBooksInfo(books){
+        let self = this;
+        let deferred = Q.defer();
+        new Q()
+            .then(function(){
+                return self.BOOK_REPO.getBooksInfo(books);
+            })
+            .then(function(result){
+                return deferred.resolve(result);
+            })
+            .fail(function(err){
+                Logger.info(`Error in getting book details ${err}`);
+                return deferred.reject(err);
+            });
+
+        return deferred.promise;
+    }
 } 
 
 module.exports = BOOK_SERVICE;

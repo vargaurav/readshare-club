@@ -67,6 +67,21 @@ class USER_REPO {
 
         return deferred.promise;
     }
+
+    getUsersInfo(usres){
+        let self = this;
+        let deferred = Q.defer();
+        let query = UTIL.format('select * from user where id in (%s)', usres.toString());
+        Logger.info(`getUsersInfo_Query : ${query}`);
+        self.DB_INSTANCE.query(query, function (error, result) {
+            if(error)
+                return deferred.reject(error);
+            else 
+                return deferred.resolve(result);
+        });
+
+        return deferred.promise;
+    }
 }
 
 module.exports = USER_REPO;

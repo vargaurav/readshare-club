@@ -62,5 +62,8 @@ module.exports = function (app, controllerObject) {
     app.get(
         '/v1/home',
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getHomePageContent'),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
+        boundMethod(controllerObject.BOOK_CONTROLLER, 'getBooksInfo'),
+        ResponseController.sendResponse
     );
 };

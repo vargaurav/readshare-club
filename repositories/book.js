@@ -120,6 +120,21 @@ class BOOK_REPO {
 
         return deferred.promise;
     }
+
+    getBooksInfo(books){
+        let self = this;
+        let deferred = Q.defer();
+        let query = UTIL.format('select * from book where id in (%s)', books.toString());
+        Logger.info(`getBooksInfo_Query : ${query}`);
+        self.DB_INSTANCE.query(query, function (error, result) {
+            if(error)
+                return deferred.reject(error);
+            else 
+                return deferred.resolve(result);
+        });
+
+        return deferred.promise;
+    }
 }
 
 module.exports = BOOK_REPO;
