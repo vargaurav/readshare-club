@@ -9,6 +9,7 @@ var
     USER_CONTROLLER = require('../controller/userController'),
     BOOK_CONTROLLER = require('../controller/bookController'),
     ESSAY_CONTROLLER = require('../controller/essayController'),
+    PODCAST_CONTROLLER = require('../controller/podcastController'),
     Logger = null;
 
 function controller(opts) {
@@ -53,6 +54,12 @@ controller.prototype.init = function (opts, cb) {
             Logger.info(`Initiating essay Controller`);
             self.ESSAY_CONTROLLER = new ESSAY_CONTROLLER(opts,self);
             return self.ESSAY_CONTROLLER.init(opts);
+        })
+        .then(function(con){
+            Logger.info(`Essay controller initialised`);
+            Logger.info(`Initiating podcast Controller`);
+            self.PODCAST_CONTROLLER = new PODCAST_CONTROLLER(opts,self);
+            return self.PODCAST_CONTROLLER.init(opts);
         })
         .then(function () {
             Logger.info(`Init all dependencies`);

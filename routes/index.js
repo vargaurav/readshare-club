@@ -9,6 +9,7 @@ const ErrorController = require('../controller/ErrorController');
 const apiSchema = require('../api-schema/user');
 const bookApiSchema = require('../api-schema/book');
 const essaySchema = require('../api-schema/essay');
+const podcastApiSchema = require('../api-schema/podcast');
 
 module.exports = function (app, controllerObject) {
 
@@ -78,6 +79,23 @@ module.exports = function (app, controllerObject) {
         '/v1/essays',
         boundMethod(controllerObject.ESSAY_CONTROLLER, 'getHomePageContent'),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
+        ResponseController.sendResponse
+    );
+
+    app.post(
+        '/v1/podcast/summary',
+        CommonController.validateSchema(podcastApiSchema.rules.post_summary),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
+        boundMethod(controllerObject.PODCAST_CONTROLLER, 'getPodcastDetails'),
+        boundMethod(controllerObject.PODCAST_CONTROLLER, 'addOrEditPodcast'),
+        boundMethod(controllerObject.PODCAST_CONTROLLER, 'saveContent')
+    );
+
+    app.get(
+        '/v1/podcasts',
+        boundMethod(controllerObject.PODCAST_CONTROLLER, 'getHomePageContent'),
+        boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
+        boundMethod(controllerObject.PODCAST_CONTROLLER, 'getPodcastsInfo'),
         ResponseController.sendResponse
     );
 };
