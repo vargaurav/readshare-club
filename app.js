@@ -72,13 +72,13 @@ new Q(undefined)
         return new Q();
     })
     .then(function () {
+        LOGGER.info('Initiating controller');
+        return initController();
+    })
+    .then(function () {
         LOGGER.info('Loading express routes');
         ROUTES(APP, CONTROLLER_OBJECT);
         return new Q();
-    })
-    .then(function () {
-        LOGGER.info('Initiating controller');
-        return initController();
     })
     .fail(function (error) {
         LOGGER.error(`Error in inti controller ${UTIL.inspect(error)}`);

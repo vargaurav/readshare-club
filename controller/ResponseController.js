@@ -5,7 +5,7 @@ let response = {
     },
 
     sendResponse: function (req, res, next) {
-    
+        res.status(200).json(res.body);
     },
 
     sendFailure: function (next, responseCode) {
