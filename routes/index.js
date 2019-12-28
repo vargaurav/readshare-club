@@ -38,21 +38,25 @@ module.exports = function (app, controllerObject) {
 
     app.get(
         '/v1/gettestdata',
+        CommonController.setCorsHeaders,
         boundMethod(controllerObject.TEST_CONTROLLER, 'getDataFromTest')
     );
     app.post(
         '/v1/registerUser',
+        CommonController.setCorsHeaders,
         CommonController.validateSchema(apiSchema.rules.register_user),
         boundMethod(controllerObject.USER_CONTROLLER, 'registerUser')
     );
 
     app.post(
         '/v1/login',
+        CommonController.setCorsHeaders,
         boundMethod(controllerObject.USER_CONTROLLER, 'loginUser')
     );
 
     app.post(
         '/v1/book/summary',
+        CommonController.setCorsHeaders,
         CommonController.validateSchema(bookApiSchema.rules.post_summary),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getBookDetails'),
@@ -62,6 +66,7 @@ module.exports = function (app, controllerObject) {
 
     app.get(
         '/v1/home',
+        CommonController.setCorsHeaders,
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getHomePageContent'),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
         boundMethod(controllerObject.BOOK_CONTROLLER, 'getBooksInfo'),
@@ -70,6 +75,7 @@ module.exports = function (app, controllerObject) {
 
     app.post(
         '/v1/essays/summary',
+        CommonController.setCorsHeaders,
         CommonController.validateSchema(essaySchema.rules.post_essay),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
         boundMethod(controllerObject.ESSAY_CONTROLLER, 'saveContent')
@@ -77,6 +83,7 @@ module.exports = function (app, controllerObject) {
 
     app.get(
         '/v1/essays',
+        CommonController.setCorsHeaders,
         boundMethod(controllerObject.ESSAY_CONTROLLER, 'getHomePageContent'),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
         ResponseController.sendResponse
@@ -84,6 +91,7 @@ module.exports = function (app, controllerObject) {
 
     app.post(
         '/v1/podcast/summary',
+        CommonController.setCorsHeaders,
         CommonController.validateSchema(podcastApiSchema.rules.post_summary),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUserDetails'),
         boundMethod(controllerObject.PODCAST_CONTROLLER, 'getPodcastDetails'),
@@ -93,6 +101,7 @@ module.exports = function (app, controllerObject) {
 
     app.get(
         '/v1/podcasts',
+        CommonController.setCorsHeaders,
         boundMethod(controllerObject.PODCAST_CONTROLLER, 'getHomePageContent'),
         boundMethod(controllerObject.USER_CONTROLLER, 'getUsersInfo'),
         boundMethod(controllerObject.PODCAST_CONTROLLER, 'getPodcastsInfo'),

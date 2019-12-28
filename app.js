@@ -25,9 +25,10 @@ var
     ROUTES = require('./routes'),
     CONTROLLER = require('./controller'),
     UUID = require('uuid/v4'),
+    cors = require('cors'),
 
     APP = EXPRESS(),
-    PORT = _.get(process, 'env.PORT', 3000), //default port 3000
+    PORT = _.get(process, 'env.PORT', 3001), //default port 3000
     CONTROLLER_OBJECT,
     INIT_OPTS = {};
 
@@ -49,6 +50,15 @@ APP.use((req, res, next) => {
     req.uuid = _.get(req, 'headers.uniquenginxid') || UUID();
     return next();
 });
+
+var whitelist = ['*', 'http://localhost:3001'];
+var corsOptions = {
+  origin: function (origin, callback) {
+    callback(null, true);
+  }
+}
+
+APP.use(cors(corsOptions));
 
 process.on('uncaughtException', (error) => {
     LOGGER.error(`Uncaught Exception: Please take action immediately : ${UTIL.inspect(error)}`);
