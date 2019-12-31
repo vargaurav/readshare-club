@@ -163,7 +163,11 @@ class USER_CONTROLLER {
         let self = this;
         let users = _.get(res.body, 'user_info', []);
         self.USER_SERVICE.getUsersInfo(users).then(function(result){
-            res.body.user_info = result;
+            let user_info = {};
+            result.forEach(element => {
+                user_info[element.id.toString()] = element.user_name.toString();
+            });
+            res.body.user_info = user_info;
             return next();
         }).fail(function(err){
             console.log(err);

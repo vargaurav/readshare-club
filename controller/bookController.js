@@ -96,7 +96,11 @@ class BOOK_CONTROLLER {
         let self = this;
         let users = _.get(res.body, 'book_info', []);
         self.BOOK_SERVICE.getBooksInfo(users).then(function(result){
-            res.body.book_info = result;
+            let book_info = {};
+            result.forEach(element => {
+                book_info[element.id.toString()] = element.name.toString();
+            });
+            res.body.book_info = book_info;
             return next();
         }).fail(function(err){
             res.status(400).json({"message":"Something went wrong!"});
