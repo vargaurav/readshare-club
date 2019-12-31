@@ -9,8 +9,6 @@ var PROGRAM = require('commander');
     Command Line arguments
 */
 PROGRAM.option('-v, --verbose', 'Enable verbose logging')
-    .option('-d, --digitalmarketplace', 'Fulfillment Service for digital marketplace')
-    .option('-rsa, --rsa [value]', 'Encryption File path for MF')
     .parse(process.argv);
 
 var
